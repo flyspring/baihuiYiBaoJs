@@ -1,0 +1,24 @@
+{
+  "name": "baihuiyibaojs",
+  "version": "1.0.0",
+  "description": "baihui yibao js client package",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "mocha --reporter spec"
+  },
+  "keywords": [
+    "baihuiYiBaoJs"
+  ],
+  "author": "abel",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "mocha": "^6.2.0",
+    "typescript": "^3.7.0-dev.20190821",
+    "webpack-cli": "^3.3.7",
+    "webpack-typescript": "^0.5.6"
+  }
+}
