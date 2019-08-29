@@ -63,6 +63,20 @@ export declare class BaiHuiYiBaoJs {
      */
     payCalc(type: string, data?: any): void;
     /**
+     * 取消门诊号下所有未结算方案
+     * 因为试算时，上传了处方信息，
+     * 如果不结算的话，把此门诊号下的未结算处方撤销
+     * @param type
+     * @param data
+     */
+    cancel(type: string, data?: any): void;
+    /**
+     * refund
+     * @param type
+     * @param data
+     */
+    refund(type: string, data?: any): void;
+    /**
      * set callbacks
      * @param callbacks
      */

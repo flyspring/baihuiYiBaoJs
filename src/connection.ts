@@ -55,7 +55,7 @@ export class Connection {
                     console.log('onopen', event);
                 }
                 if (this.handler) {
-                    this.handler({cmd:'HS_CONNECTED', rst:true, data:{}});
+                    this.handler({cmd:'HS_CONNECTED', rst:true, data:'{msg:"connect successfully"}'});
                 }
             };
 
@@ -65,7 +65,7 @@ export class Connection {
                     console.log('onerror', event);
                 }
                 if (this.handler) {
-                    this.handler({cmd:'HS_ERROR', rst:true, data:{}});
+                    this.handler({cmd:'HS_ERROR', rst:true, data:'{msg:"connect error"}'});
                 }
             }
 
@@ -83,8 +83,17 @@ export class Connection {
                 let rst = data.substring(0, 2) == "T:" ? true : false;
                 data = data.substring(2, data.length); 
 
+                var rstData = data;
+                try {
+                    if (rst && data != '') {
+                        rstData = JSON.parse(data);
+                    }
+                } catch (error) {
+                    //有些不是json格式字符串
+                }
+
                 if (this.handler) {
-                    this.handler({cmd:cmd, rst:rst, data:data});
+                    this.handler({cmd:cmd, rst:rst, data:rstData});
                 }
             }
 
@@ -96,7 +105,7 @@ export class Connection {
 
                 this.connected = false;
                 if (this.handler) {
-                    this.handler({cmd:'HS_DISCONNECTED', rst:true, data:{}});
+                    this.handler({cmd:'HS_DISCONNECTED', rst:true, data:'{msg:"connect closed"}'});
                 }
             }
         }

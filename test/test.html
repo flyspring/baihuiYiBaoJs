@@ -45,6 +45,7 @@
                 <label>医保支付：</label><input type="text" id="yb_pay_amount" value="0" disabled /><span id="yb_paid_remain_amount">0</span></br>
                 <label>剩余支付：</label><input type="text" id="remain_pay_amount" value="0" /></br>
                 <button id="btn_pay" onclick="payTreatment(this);">点击支付</button>
+                <button id="btn_cancel_pay" onclick="cancelPay(this);">取消支付</button>
             </div>
 
 	    </div>
@@ -124,6 +125,7 @@
 
             var cardInfo = {}; //读卡后存储一下读卡信息
             var rstRegister = {}; //医保注册登记后保存的数据
+            var hasTryCalc = false; //试算后的标记
             var rstYbPay = {}; //医保支付后保存的数据
 
             var cityYiBao;
@@ -203,6 +205,14 @@
                 payCalcFee();
             }
 
+            //取消支付，或者关闭窗口后触发
+            function cancelPay(obj) {
+                var obj = $(obj);
+                obj.attr('disabled', true);
+                $('#btn_pay').attr('disabled', true);
+                cancelTryCalc();
+            }
+
             //1. 读卡触发
             function readCard(obj) {
                 //禁掉读卡，防止重复读卡
@@ -276,6 +286,27 @@
                     //cityYiBao.payCalc('reg', calcData);
                 } else { //方案
                     cityYiBao.payCalc('pst', calcData);
+                }
+            }
+
+            //5. 医保方案撤销，取消试算
+            function cancelTryCalc() {
+                if (selectPayOpt == '0') {
+                    return;
+                }
+
+                if (!hasTryCalc) {
+                    addContent('没有进行试算，不需要方案撤销');
+                    return;
+                }
+
+                addContent('医保方案开始撤销');
+
+                if (selectPayOpt == '1') { //挂号
+                    addContent('挂号方案撤销暂时没有开通');
+                    //cityYiBao.tryCalc('reg', calcData);
+                } else { //方案
+                    cityYiBao.cancel('pst', calcData);
                 }
             }
 
@@ -421,6 +452,9 @@
 
                 if (rst) {
                     addContent('医保试算成功');
+
+                    hasTryCalc = true;
+
                     //返回的data具体看showdoc文档相关字段
                     //展示需要支付的各个金额，如果不够，需要显示其他支付方式需要支付多少钱
                     ybPayAmount = 0; //置为0
@@ -464,6 +498,16 @@
                     addContent('医保结算成功');
                 } else {
                     addContent('医保结算失败');
+                }
+            }
+
+            //f. 医保撤销处方后续处理
+            function handleCancelTryCalc(ybType, rst, data) {
+                if (rst) {
+                    hasTryCalc = false;
+                    addContent('医保方案撤销成功');
+                } else {
+                    addContent('医保方案撤销失败');
                 }
             }
             
@@ -522,6 +566,10 @@
                 {
                     cmd: "PAY_PST", 
                     callback: handlePayCalc
+                },
+                {
+                    cmd: "CANCEL_PST",
+                    callback: handleCancelTryCalc
                 }
             ];
             cityYiBao.setCallbacks(callbacks);
@@ -553,7 +601,7 @@
                                 "单价":"0.2400",
                                 "数量":"20",
                                 "金额":"4.80",
-                                "付数":"14"
+                                "付数":"15"
                             }, 
                             {
                                 "处方号":"2345", 
@@ -566,7 +614,7 @@
                                 "单价":"0.200",
                                 "数量":"10",
                                 "金额":"2.00",
-                                "付数":"14"
+                                "付数":"15"
                             }
                         ];
                   } else if (selectPayOpt == '3') { //中成药

@@ -54,8 +54,7 @@ export class BaiHuiYiBaoJs {
 
             handler = this.getCallback(event.cmd);
             if (handler) {
-                var rstData = event.rst ? JSON.parse(event.data) : event.data;
-                handler(this.ybType, event.rst, rstData);
+                handler(this.ybType, event.rst, event.data);
             }
         });
 
@@ -206,6 +205,44 @@ export class BaiHuiYiBaoJs {
             console.log('正在结算', data);
         }
         this.sendMsg('REQ_PAY_' + type, data);
+    }
+
+    /**
+     * 取消门诊号下所有未结算方案
+     * 因为试算时，上传了处方信息，
+     * 如果不结算的话，把此门诊号下的未结算处方撤销
+     * @param type 
+     * @param data 
+     */
+    public cancel(type:string, data?:any) {
+        type = type.toUpperCase();
+        if (type != 'PST' && type != 'REG') {
+            console.log('结算参数有误');
+            return;
+        }
+
+        if (this.options.debug) {
+            console.log('正在结算', data);
+        }
+        this.sendMsg('REQ_CANCEL_' + type, data);
+    }
+
+    /**
+     * refund
+     * @param type 
+     * @param data 
+     */
+    public refund(type:string, data?:any) {
+        type = type.toUpperCase();
+        if (type != 'PST' && type != 'REG') {
+            console.log('结算参数有误');
+            return;
+        }
+
+        if (this.options.debug) {
+            console.log('正在结算', data);
+        }
+        this.sendMsg('REQ_REFUND_' + type, data);
     }
 
     /**
