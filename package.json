@@ -1,6 +1,6 @@
 {
   "name": "baihuiyibaojs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "baihui yibao js client package",
   "main": "./dist/index.js",
   "scripts": {

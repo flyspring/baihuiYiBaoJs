@@ -1,27 +1,109 @@
 0 info it worked if it ends with ok
 1 verbose cli [ 'D:\\Program Files\\nodejs\\node.exe',
 1 verbose cli   'D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'version',
-1 verbose cli   '1.0.2' ]
+1 verbose cli   'publish' ]
 2 info using npm@3.10.10
 3 info using node@v6.10.3
-4 info git [ 'status', '--porcelain' ]
-5 verbose stack Error: Git working directory not clean.
-5 verbose stack D npm-debug.log
-5 verbose stack     at D:\Program Files\nodejs\node_modules\npm\lib\version.js:247:19
-5 verbose stack     at D:\Program Files\nodejs\node_modules\npm\lib\utils\no-progress-while-running.js:21:8
-5 verbose stack     at ChildProcess.exithandler (child_process.js:195:7)
-5 verbose stack     at emitTwo (events.js:106:13)
-5 verbose stack     at ChildProcess.emit (events.js:191:7)
-5 verbose stack     at maybeClose (internal/child_process.js:886:16)
-5 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
-6 verbose cwd D:\myxc\code\baihuiYiBaoJs
-7 error Windows_NT 10.0.10586
-8 error argv "D:\\Program Files\\nodejs\\node.exe" "D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "version" "1.0.2"
-9 error node v6.10.3
-10 error npm  v3.10.10
-11 error Git working directory not clean.
-11 error D npm-debug.log
-12 error If you need help, you may report this error at:
-12 error     <https://github.com/npm/npm/issues>
-13 verbose exit [ 1, true ]
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: 'D:\\myxc\\code\\baihuiYiBaoJs',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory C:\Users\admin\AppData\Roaming\npm-cache\baihuiyibaojs\1.0.1\package.tgz not in flight; packing
+9 verbose correctMkdir C:\Users\admin\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+10 info lifecycle baihuiyibaojs@1.0.1~prepublish: baihuiyibaojs@1.0.1
+11 silly lifecycle baihuiyibaojs@1.0.1~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ 'C:\\Users\\admin\\AppData\\Roaming\\npm-cache\\baihuiyibaojs\\1.0.1\\package.tgz',
+12 verbose tar pack   'D:\\myxc\\code\\baihuiYiBaoJs' ]
+13 verbose tarball C:\Users\admin\AppData\Roaming\npm-cache\baihuiyibaojs\1.0.1\package.tgz
+14 verbose folder D:\myxc\code\baihuiYiBaoJs
+15 verbose addLocalTarball adding from inside cache C:\Users\admin\AppData\Roaming\npm-cache\baihuiyibaojs\1.0.1\package.tgz
+16 verbose correctMkdir C:\Users\admin\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+17 silly cache afterAdd baihuiyibaojs@1.0.1
+18 verbose afterAdd C:\Users\admin\AppData\Roaming\npm-cache\baihuiyibaojs\1.0.1\package\package.json not in flight; writing
+19 verbose correctMkdir C:\Users\admin\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+20 verbose afterAdd C:\Users\admin\AppData\Roaming\npm-cache\baihuiyibaojs\1.0.1\package\package.json written
+21 silly publish { name: 'baihuiyibaojs',
+21 silly publish   version: '1.0.1',
+21 silly publish   description: 'baihui yibao js client package',
+21 silly publish   main: './dist/index.js',
+21 silly publish   scripts: { build: 'webpack', test: 'mocha --reporter spec' },
+21 silly publish   keywords: [ 'baihuiYiBaoJs' ],
+21 silly publish   author: { name: 'abel' },
+21 silly publish   license: 'ISC',
+21 silly publish   devDependencies:
+21 silly publish    { chai: '^4.2.0',
+21 silly publish      express: '^4.17.1',
+21 silly publish      http: '0.0.0',
+21 silly publish      mocha: '^6.2.0',
+21 silly publish      typescript: '^3.7.0-dev.20190821',
+21 silly publish      'webpack-cli': '^3.3.7',
+21 silly publish      'webpack-typescript': '^0.5.6' },
+21 silly publish   readme: '# baihuiYiBaoJs\n对接医保的前端程序\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: 'cdf2063cc0178f09ec9b9b6436bfdcafaebd0d2f',
+21 silly publish   _id: 'baihuiyibaojs@1.0.1',
+21 silly publish   _shasum: 'ecf9090bfed22054c304c55b402867b9c9fe1dab',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name baihuiyibaojs
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'baihuiyibaojs',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'baihuiyibaojs',
+26 silly mapToRegistry   name: 'baihuiyibaojs',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/baihuiyibaojs
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading C:\Users\admin\AppData\Roaming\npm-cache\baihuiyibaojs\1.0.1\package.tgz
+30 verbose request uri https://registry.npmjs.org/baihuiyibaojs
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 14:39:36
+33 verbose request using bearer token for auth
+34 verbose request id 98500622dbc108f7
+35 http request PUT https://registry.npmjs.org/baihuiyibaojs
+36 http 403 https://registry.npmjs.org/baihuiyibaojs
+37 verbose headers { date: 'Fri, 30 Aug 2019 06:40:05 GMT',
+37 verbose headers   'content-type': 'application/json',
+37 verbose headers   'transfer-encoding': 'chunked',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'set-cookie': [ '__cfduid=d6d987b4b83637ac49e802e91945cc2fb1567147205; expires=Sat, 29-Aug-20 06:40:05 GMT; path=/; domain=.npmjs.org; HttpOnly' ],
+37 verbose headers   'cf-ray': '50e4c56f49c276ce-LAX',
+37 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+37 verbose headers   vary: 'Accept-Encoding',
+37 verbose headers   server: 'cloudflare',
+37 verbose headers   'content-encoding': 'gzip' }
+38 verbose request invalidating C:\Users\admin\AppData\Roaming\npm-cache\registry.npmjs.org\baihuiyibaojs on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: You cannot publish over the previously published versions: 1.0.1. : baihuiyibaojs
+40 verbose stack     at makeError (D:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:302:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (D:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:290:14)
+40 verbose stack     at D:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:216:7
+40 verbose stack     at Gunzip.onEnd (zlib.js:227:5)
+40 verbose stack     at emitNone (events.js:91:20)
+40 verbose stack     at Gunzip.emit (events.js:185:7)
+40 verbose stack     at endReadableNT (_stream_readable.js:974:12)
+40 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:80:11)
+40 verbose stack     at process._tickCallback (internal/process/next_tick.js:104:9)
+41 verbose statusCode 403
+42 verbose pkgid baihuiyibaojs
+43 verbose cwd D:\myxc\code\baihuiYiBaoJs
+44 error Windows_NT 10.0.10586
+45 error argv "D:\\Program Files\\nodejs\\node.exe" "D:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+46 error node v6.10.3
+47 error npm  v3.10.10
+48 error code E403
+49 error You cannot publish over the previously published versions: 1.0.1. : baihuiyibaojs
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
