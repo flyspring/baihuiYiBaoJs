@@ -19,13 +19,14 @@ export class BaiHuiYiBaoJs {
         this.defaultCallbacks = {
             "HS_CONNECTED": this.init, 
             "RST_INIT": this.login,
-            "RST_LOGIN": this.ready,
+            //"RST_LOGIN": this.ready,
             "HS_DISCONNECTED": this.close,
             "HS_ERROR": this.error,
         };
 
         //回调默认设置
         this.callbacks = {
+            "RST_LOGIN": false,
             "RST_READ_CARD": false, 
             "RST_REGISTRATION": false, 
             "RST_CALC_REG": false,
@@ -33,7 +34,22 @@ export class BaiHuiYiBaoJs {
             "RST_PAY_REG": false,
             "RST_PAY_PST": false,
         };
+    }
 
+    /**
+     * connect yibao
+     */
+    public connect() {
+        if (this.connection && this.connection.isConnected()) {
+            let handler = this.getCallback('RST_LOGIN');
+            if (handler) {
+                handler(this.ybType, true, '');
+            } else {
+                this.ready(true, '');
+            }
+
+            return true;
+        }
 
         //链接医保助手
         this.connection = new Connection(this.options.ip, this.options.port, this.options.debug);
@@ -138,6 +154,7 @@ export class BaiHuiYiBaoJs {
      */
     protected close(rst:boolean, data:any) {
         console.log(this.ybType + ': 链接断开');
+        alert(this.ybType + ': 链接医保助手已断开')
     }
 
     /**
@@ -145,8 +162,8 @@ export class BaiHuiYiBaoJs {
      * @param ybType 
      * @param data 
      */
-    protected error(ybType:string, data:any) {
-        alert(ybType + ': 链接医保助手出现异常，请确保医保助手已经启动');
+    protected error(rst:boolean, data:any) {
+        alert(this.ybType + ': 链接医保助手出现异常，请确保医保助手已经启动');
     }
 
     /**

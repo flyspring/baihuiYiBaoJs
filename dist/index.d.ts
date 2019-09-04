@@ -6,6 +6,10 @@ export declare class BaiHuiYiBaoJs {
     private defaultCallbacks;
     constructor(ybType: string, options?: any);
     /**
+     * connect yibao
+     */
+    connect(): boolean;
+    /**
      * set options
      * @param options
      */
@@ -39,7 +43,7 @@ export declare class BaiHuiYiBaoJs {
      * @param ybType
      * @param data
      */
-    protected error(ybType: string, data: any): void;
+    protected error(rst: boolean, data: any): void;
     /**
      * 读卡
      * @param data

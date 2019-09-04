@@ -542,6 +542,15 @@
                      "处方信息": payItems //处方明细，具体其数据结构，切换类型自动赋值了
                };
             }
+
+            //链接后的回调
+            function handleConnect(ybType, rst, data) {
+                if (rst) {
+                    addContent('医保链接成功，业务周期编号:' + data);
+                } else {
+                    addContent('医保链接失败');
+                }
+            }
         </script>
 
         <script>
@@ -549,6 +558,9 @@
 
 			 //1. 初始化市医保
             cityYiBao = new BaiHuiYiBao.BaiHuiYiBaoJs('CITY_YB', options);
+            cityYiBao.setCallback('LOGIN', handleConnect);
+            cityYiBao.connect();
+
             //设置多个回调
             var callbacks = [
                 {
