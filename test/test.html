@@ -46,6 +46,7 @@
                 <label>剩余支付：</label><input type="text" id="remain_pay_amount" value="0" /></br>
                 <button id="btn_pay" onclick="payTreatment(this);">点击支付</button>
                 <button id="btn_cancel_pay" onclick="cancelPay(this);">取消支付</button>
+                <button id="btn_refund_pay" onclick="refundPay(this);">医保退款</button>
             </div>
 
 	    </div>
@@ -213,6 +214,14 @@
                 cancelTryCalc();
             }
 
+            //医保退款
+            function refundPay(obj) {
+                var obj = $(obj);
+                obj.attr('disabled', true);
+                obj.attr('disabled', true);
+                refund();
+            }
+
             //1. 读卡触发
             function readCard(obj) {
                 //禁掉读卡，防止重复读卡
@@ -307,6 +316,29 @@
                     //cityYiBao.tryCalc('reg', calcData);
                 } else { //方案
                     cityYiBao.cancel('pst', calcData);
+                }
+            }
+
+            //6. 医保撤销结算--退款
+            function refund() {
+                if (selectPayOpt == '0') {
+                    return;
+                }
+
+                addContent('医保开始撤销结算');
+                if (selectPayOpt == '1') {
+                    addContent('挂号结算暂时无法进行撤销');
+                } else { //方案
+                    refundData = {  //退款数据
+                        "病历号":"10856",
+                        "门诊号":"16397",
+                        "医保门诊号":"16397",
+                        "处方号":"1085601",
+                        "单据号":"0410335192",
+                        "撤销时间":"2018-12-03 13:13:10"    
+                    };
+
+                    cityYiBao.refund('PST', refundData);
                 }
             }
 
@@ -510,6 +542,17 @@
                     addContent('医保方案撤销失败');
                 }
             }
+
+            //g. 医保退款后续处理
+            function handleRefund(ybType, rst, data) {
+                if (rst) {
+                    addContent('医保退款成功');
+
+                    //调用后台接口，同步更新
+                } else {
+                    addContent('医保退款失败');
+                }
+            }
             
             //3-4 组织试算及结算的数据
             function getCalcParams() {
@@ -582,6 +625,10 @@
                 {
                     cmd: "CANCEL_PST",
                     callback: handleCancelTryCalc
+                }, 
+                {
+                    cmd: 'REFUND_PST', 
+                    callback: handleRefund
                 }
             ];
             cityYiBao.setCallbacks(callbacks);

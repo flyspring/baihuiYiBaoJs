@@ -234,12 +234,12 @@ export class BaiHuiYiBaoJs {
     public cancel(type:string, data?:any) {
         type = type.toUpperCase();
         if (type != 'PST' && type != 'REG') {
-            console.log('结算参数有误');
+            console.log('撤销处方参数有误');
             return;
         }
 
         if (this.options.debug) {
-            console.log('正在结算', data);
+            console.log('正在撤销处方', data);
         }
         this.sendMsg('REQ_CANCEL_' + type, data);
     }
@@ -252,12 +252,12 @@ export class BaiHuiYiBaoJs {
     public refund(type:string, data?:any) {
         type = type.toUpperCase();
         if (type != 'PST' && type != 'REG') {
-            console.log('结算参数有误');
+            console.log('撤销结算参数有误');
             return;
         }
 
         if (this.options.debug) {
-            console.log('正在结算', data);
+            console.log('正在撤销结算', data);
         }
         this.sendMsg('REQ_REFUND_' + type, data);
     }
