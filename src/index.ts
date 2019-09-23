@@ -12,6 +12,9 @@ export class BaiHuiYiBaoJs {
 
     private defaultCallbacks:{};
 
+    private unPayItems = []; //项目编号为空的，不参与计算的项目
+    private pstNo = ''; //最新一次结算的处方号，用于merge未参与计算项目时的比较，确保是一个方案
+
     constructor(ybType:string, options?:any) {
         this.ybType = ybType;
         this.setOptions(options);
@@ -70,6 +73,11 @@ export class BaiHuiYiBaoJs {
 
             handler = this.getCallback(event.cmd);
             if (handler) {
+                //方案试算和结算处理前先拦截进行merge处理
+                if (event.cmd == 'RST_CALC_PST' || event.cmd == 'RST_PAY_PST') {
+                    event.data = this.mergeUnpayitems(event.data);
+                }
+
                 handler(this.ybType, event.rst, event.data);
             }
         });
@@ -203,6 +211,23 @@ export class BaiHuiYiBaoJs {
         if (this.options.debug) {
             console.log('正在试算', data);
         }
+
+        //进行拆分=有医保编号+没有医保编号的药材
+        if (data['处方信息']) {
+            let payItems = this.getEnabledCalcItems(data['处方信息']);
+            if (payItems.length == 0) {
+                let handler = this.getCallback('RST_CALC_PST');
+                if (handler) {
+                    handler(this.ybType, false, '处方里的药材全都没有医保编号，请选择其他支付方式');
+                } else {
+                    alert('处方里的药材全都没有医保编号，请选择其他支付方式');
+                }
+                return false;
+            }
+
+            data['处方信息'] = payItems;
+        }
+
         this.sendMsg('REQ_CALC_' + type, data);
     }
 
@@ -221,6 +246,23 @@ export class BaiHuiYiBaoJs {
         if (this.options.debug) {
             console.log('正在结算', data);
         }
+
+        //进行拆分=有医保编号+没有医保编号的药材
+        if (data['处方信息']) {
+            let payItems = this.getEnabledCalcItems(data['处方信息']);
+            if (payItems.length == 0) {
+                let handler = this.getCallback('RST_CALC_PST');
+                if (handler) {
+                    handler(this.ybType, false, '处方里的药材全都没有医保编号，请选择其他支付方式');
+                } else {
+                    alert('处方里的药材全都没有医保编号，请选择其他支付方式');
+                }
+                return false;
+            }
+
+            data['处方信息'] = payItems;
+        }
+
         this.sendMsg('REQ_PAY_' + type, data);
     }
 
@@ -332,5 +374,83 @@ export class BaiHuiYiBaoJs {
         }
 
         return true;
+    }
+
+    /**
+     * get enabled calc Items
+     * @param data
+     */
+    protected getEnabledCalcItems(items:any) {
+        if (items.length == 0) {
+            return [];
+        }
+
+        this.pstNo = ''; //每次进来都置为空
+        this.unPayItems = []; //每次进来重新赋值
+        let payItems = [];
+        for (let i = 0; i < items.length; i++) {
+            if (items[i]['项目自编码'] == '') {
+                this.unPayItems.push(items[i]);
+            } else {
+                payItems.push(items[i]);
+            }
+        }
+
+        //赋值一下处方号
+        if (payItems.length > 0) {
+            this.pstNo = payItems[payItems.length - 1]['处方号'];
+        }
+
+        if (this.options.debug) {
+            console.log('unPayItems', this.unPayItems);
+        }
+
+        return payItems;
+    }
+
+    /**
+     * merge unpay items
+     */
+    protected mergeUnpayitems(data:any) {
+        if (data['明细详情'] && data['明细详情'].length > 0 && this.unPayItems.length > 0) {
+            let len = data['明细详情'].length;
+            let pstNo = data['明细详情'][len - 1]['处方号'];
+            if (pstNo == this.pstNo) { //是一个处方
+                let unPayItemsAmount = 0.00;
+                for (let i = 0; i < this.unPayItems.length; i++) {
+                    let itemAmount = this.unPayItems[i]['金额'] * this.unPayItems[i]['付数'];
+                    unPayItemsAmount += itemAmount;
+                    data['明细详情'].push({
+                        "处方号":this.unPayItems[i]['处方号'],
+                        "处方号流水号":this.unPayItems[i]['流水号'],
+                        "金额":itemAmount.toFixed(3) + '',
+                        "明细结果":"成功",
+                        "项目等级":'',
+                        "项目名称":this.unPayItems[i]['项目名称'],
+                        "项目自编码":"",
+                        "支付上限":"",
+                        "自付比例":"1.0",
+                        "自付金额":itemAmount.toFixed(3) + '',
+                        "自理金额": "0.0"
+                    });
+                }
+
+                //流水号排序
+                data['明细详情'].sort(function (a:any, b:any) {
+                    return a['处方号流水号'] - b['处方号流水号'];
+                });
+
+                data['支付详情']['医保现金'] = (data['支付详情']['医保现金'] * 1 + unPayItemsAmount).toFixed(3) + '';
+
+                if (this.options.debug) {
+                    console.log('mergeUnpayitems', data);
+                }
+            }
+        }
+
+        this.unPayItems = [];
+        this.pstNo = '';
+
+        return data;
     }
 }

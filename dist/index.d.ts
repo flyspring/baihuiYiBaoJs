@@ -4,6 +4,8 @@ export declare class BaiHuiYiBaoJs {
     private options;
     private callbacks;
     private defaultCallbacks;
+    private unPayItems;
+    private pstNo;
     constructor(ybType: string, options?: any);
     /**
      * connect yibao
@@ -59,13 +61,13 @@ export declare class BaiHuiYiBaoJs {
      * @param type PST, REG
      * @param data
      */
-    tryCalc(type: string, data?: any): void;
+    tryCalc(type: string, data?: any): boolean;
     /**
      * pay calc
      * @param type PST, REG
      * @param data
      */
-    payCalc(type: string, data?: any): void;
+    payCalc(type: string, data?: any): boolean;
     /**
      * 取消门诊号下所有未结算方案
      * 因为试算时，上传了处方信息，
@@ -116,4 +118,13 @@ export declare class BaiHuiYiBaoJs {
      * @param data
      */
     protected sendMsg(event: string, data: any): boolean;
+    /**
+     * get enabled calc Items
+     * @param data
+     */
+    protected getEnabledCalcItems(items: any): any[];
+    /**
+     * merge unpay items
+     */
+    protected mergeUnpayitems(data: any): any;
 }
