@@ -64,7 +64,7 @@
 
             //参数后台会传
             var options = {
-                ip: "localhost", 
+                ip: "139.196.142.54", 
                 port: "8001", 
                 debug: true,
                 userName: "admin", 
@@ -110,8 +110,8 @@
             var regSn = 'R2019072514141871676';
             var regTime = '2019-07-25 14:14:18';
             var pstSn = '';//这个号要待确定用哪个值
-            var pstTime = '2019-07-025 15:15:16';
-            var payAmount = 655.1; //支付的金额
+            var pstTime = '2019-07-25 15:15:16';
+            var payAmount = "655.1"; //支付的金额
             var ybPayAmount = 0; //医保需要支付金额
 
             var ylClassIndex = '医疗类别'; 
@@ -335,7 +335,10 @@
                         "医保门诊号":"16397",
                         "处方号":"1085601",
                         "单据号":"0410335192",
-                        "撤销时间":"2018-12-03 13:13:10"    
+                        "撤销时间":"2018-12-03 13:13:10",
+                        "退费参数":{
+                            "医保门诊号":"FFHISR00000000002243"
+                        }  
                     };
 
                     cityYiBao.refund('PST', refundData);

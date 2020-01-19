@@ -440,7 +440,7 @@ export class BaiHuiYiBaoJs {
                     return a['处方号流水号'] - b['处方号流水号'];
                 });
 
-                data['支付详情']['医保现金'] = (data['支付详情']['医保现金'] * 1 + unPayItemsAmount).toFixed(3) + '';
+                data['支付详情']['医保现金'] = (data['支付详情']['医保现金'] * 1 + unPayItemsAmount).toFixed(2) + '';
 
                 if (this.options.debug) {
                     console.log('mergeUnpayitems', data);
