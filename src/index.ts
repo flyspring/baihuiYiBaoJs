@@ -14,6 +14,7 @@ export class BaiHuiYiBaoJs {
 
     private unPayItems = []; //项目编号为空的，不参与计算的项目
     private pstNo = ''; //最新一次结算的处方号，用于merge未参与计算项目时的比较，确保是一个方案
+    //private pstItems = []; //所有需要支付的项目
 
     constructor(ybType:string, options?:any) {
         this.ybType = ybType;
@@ -251,7 +252,7 @@ export class BaiHuiYiBaoJs {
         if (data['处方信息']) {
             let payItems = this.getEnabledCalcItems(data['处方信息']);
             if (payItems.length == 0) {
-                let handler = this.getCallback('RST_CALC_PST');
+                let handler = this.getCallback('RST_PAY_PST');
                 if (handler) {
                     handler(this.ybType, false, '处方里的药材全都没有医保编号，请选择其他支付方式');
                 } else {
@@ -385,6 +386,7 @@ export class BaiHuiYiBaoJs {
             return [];
         }
 
+        //this.pstItems = items; //所有的处方项目
         this.pstNo = ''; //每次进来都置为空
         this.unPayItems = []; //每次进来重新赋值
         let payItems = [];
@@ -409,15 +411,18 @@ export class BaiHuiYiBaoJs {
     }
 
     /**
-     * merge unpay items
+     * merge unpay items include empty ybcode and fail items
      */
     protected mergeUnpayitems(data:any) {
-        if (data['明细详情'] && data['明细详情'].length > 0 && this.unPayItems.length > 0) {
-            let len = data['明细详情'].length;
-            let pstNo = data['明细详情'][len - 1]['处方号'];
-            if (pstNo == this.pstNo) { //是一个处方
+        if (data['明细详情'] && data['明细详情'].length > 0) {            
+            //1. 先处理没有医保编号的明细
+            if (this.unPayItems.length > 0) {
                 let unPayItemsAmount = 0.00;
                 for (let i = 0; i < this.unPayItems.length; i++) {
+                    if (this.unPayItems[i]['处方号'] != this.pstNo) {
+                        break;
+                    }
+
                     let itemAmount = this.unPayItems[i]['金额'] * this.unPayItems[i]['付数'];
                     unPayItemsAmount += itemAmount;
                     data['明细详情'].push({
@@ -437,17 +442,33 @@ export class BaiHuiYiBaoJs {
 
                 //流水号排序
                 data['明细详情'].sort(function (a:any, b:any) {
-                    return a['处方号流水号'] - b['处方号流水号'];
+                    if (a['处方号流水号'] && b['处方号流水号']) {
+                        return a['处方号流水号'] - b['处方号流水号'];
+                    }
+                    return 0
                 });
 
-                data['支付详情']['医保现金'] = (data['支付详情']['医保现金'] * 1 + unPayItemsAmount).toFixed(2) + '';
+                // let ybMoneyAmount = 0.00;
+                // if (data['支付详情'] && data['支付详情']['医保现金']) { //这个条件判断的把是零的情况也排除掉了
+                //     ybMoneyAmount = data['支付详情']['医保现金'] * 1
+                // }
+                // data['支付详情']['医保现金'] = (ybMoneyAmount + unPayItemsAmount).toFixed(2) + '';
 
                 if (this.options.debug) {
                     console.log('mergeUnpayitems', data);
                 }
             }
+
+            // //2. 再处理失败的明细
+            // for (let i = 0; i < data['明细详情'].length; i++) {
+            //     let item = data["明细详情"][i]
+            //     if (item['错误信息'] && item['错误信息'] != '') {
+
+            //     }
+            // }
         }
 
+        //this.pstItems = [];
         this.unPayItems = [];
         this.pstNo = '';
 

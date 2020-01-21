@@ -124,7 +124,7 @@ export declare class BaiHuiYiBaoJs {
      */
     protected getEnabledCalcItems(items: any): any[];
     /**
-     * merge unpay items
+     * merge unpay items include empty ybcode and fail items
      */
     protected mergeUnpayitems(data: any): any;
 }
